@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/urfave/cli"
 	"os"
@@ -30,10 +31,25 @@ func info() {
 	app.Usage = "gores resume-section"
 }
 
+type Contact struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Site     string `json:"site"`
+	Github   string `json:"github"`
+	Linkedin string `json:"linkedin"`
+}
+
 // TODO: fix types and create models? for them
-func contact() string {
-	// create kv pair of name, website, github, linkedin
-	return "Juan Rios"
+func contact() {
+	co := Contact{
+		"Juan Rios",
+		"sdasd",
+		"sdfdf",
+		"asdfdfsd",
+		"sdfsdf",
+	}
+
+	PrettyPrintStruct(&co)
 }
 
 func about() string {
@@ -151,4 +167,9 @@ func commands() {
 			},
 		},
 	}
+}
+
+func PrettyPrintStruct(i interface{}) {
+	s, _ := json.MarshalIndent(i, "", "\t")
+	fmt.Printf("%s \n", s)
 }
