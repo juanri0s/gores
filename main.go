@@ -39,6 +39,52 @@ type Contact struct {
 	Linkedin string `json:"linkedin"`
 }
 
+type About struct {
+	Short string `json:"short"`
+	Long  string `json:"long"`
+}
+
+type Education struct {
+	University string `json:"university"`
+	Major      string `json:"major"`
+	GPA        string `json:"gpa"`
+	Year       string `json:"year"`
+}
+
+type Skills struct {
+	Skill    string `json:"skillName"`
+	Years    string `json:"years"`
+	Projects string `json:"projects"`
+}
+
+type Work struct {
+	Company      string `json:"company"`
+	Start        string `json:"start"`
+	Finish       string `json:"finish"`
+	Descriptions string `json:"descriptions"`
+}
+
+type Projects struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Year        string `json:"year"`
+	Link        string `json:"link"`
+}
+
+type Publications struct {
+	Title   string `json:"title"`
+	Authors string `json:"authors"`
+	Year    string `json:"year"`
+	Venue   string `json:"venue"`
+}
+
+type Awards struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Year        string `json:"year"`
+	Venue       string `json:"venue"`
+}
+
 // TODO: fix types and create models? for them
 func contact() {
 	co := Contact{
