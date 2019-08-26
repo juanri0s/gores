@@ -55,29 +55,44 @@ type Skills struct {
 }
 
 type Skill struct {
-	Skill    string `json:"skillName"`
-	Years    string `json:"years"`
-	Projects string `json:"projects"`
+	Skill string `json:"skillName"`
+}
+
+type Works struct {
+	Section string `json:"section"`
+	Works   []Work `json:"work"`
 }
 
 type Work struct {
-	Section      string `json:"section"`
-	Company      string `json:"company"`
-	Start        string `json:"start"`
-	Finish       string `json:"finish"`
-	Descriptions string `json:"descriptions"`
+	Company      string        `json:"company"`
+	Start        string        `json:"startDate"`
+	Finish       string        `json:"finishDate"`
+	Descriptions []Description `json:"description"`
+}
+
+type Description struct {
+	Description string `json:"description"`
 }
 
 type Projects struct {
-	Section     string `json:"section"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	Year        string `json:"year"`
-	Link        string `json:"link"`
+	Section  string    `json:"section"`
+	Projects []Project `json:"projects"`
+}
+
+type Project struct {
+	Name        string  `json:"name"`
+	Year        string  `json:"year"`
+	Description string  `json:"description"`
+	Skills      []Skill `json:"skillsUsed"`
+	Link        string  `json:"link"`
 }
 
 type Publications struct {
-	Section string `json:"section"`
+	Section      string        `json:"section"`
+	Publications []Publication `json:"publications"`
+}
+
+type Publication struct {
 	Title   string `json:"title"`
 	Authors string `json:"authors"`
 	Year    string `json:"year"`
@@ -85,11 +100,14 @@ type Publications struct {
 }
 
 type Awards struct {
-	Section     string `json:"section"`
+	Section string  `json:"section"`
+	Awards  []Award `json:"awards"`
+}
+
+type Award struct {
 	Name        string `json:"name"`
-	Description string `json:"description"`
 	Year        string `json:"year"`
-	Venue       string `json:"venue"`
+	Description string `json:"description"`
 }
 
 var app = cli.NewApp()
@@ -105,6 +123,7 @@ func main() {
 }
 
 func resume() {
+
 	r := Resume{
 		contact(),
 		skills(),
@@ -115,7 +134,7 @@ func resume() {
 		awards(),
 	}
 
-	fmt.Println("\n Summer 2019 Resume", r)
+	fmt.Println("\n Summer 2019 Resume:", r)
 }
 
 func contact() string {
@@ -129,7 +148,7 @@ func contact() string {
 		true,
 	}
 
-	st := PrettyPrintStruct(c)
+	st := PrettyPrint(c)
 
 	return st
 }
@@ -141,7 +160,7 @@ func about() string {
 		"",
 	}
 
-	st := PrettyPrintStruct(a)
+	st := PrettyPrint(a)
 
 	return st
 }
@@ -155,53 +174,57 @@ func education() string {
 		2018,
 	}
 
-	st := PrettyPrintStruct(e)
+	st := PrettyPrint(e)
 
 	return st
 }
 
 func skills() string {
 	s := Skills{
-		Section: "Skills",
-		Skills: []Skill{
+		"Skills",
+		[]Skill{
 			{
 				"Angular",
-				"2",
-				"website",
 			},
 			{
 				"Angular",
-				"2",
-				"website",
-			},
-			{
-				"Angular",
-				"2",
-				"website",
-			},
-			{
-				"Angular",
-				"2",
-				"website",
 			},
 		},
 	}
 
-	st := PrettyPrintStruct(s)
+	st := PrettyPrint(s)
 
 	return st
 }
 
 func work() string {
-	w := Work{
+	w := Works{
 		"Work Experience",
-		"",
-		"",
-		"",
-		"",
+		[]Work{
+			{
+				"UPS",
+				"2019",
+				"2019",
+				[]Description{
+					{
+						"adfasffasfagfagdfgdsfg",
+					},
+				},
+			},
+			{
+				"Carnegie Mellon",
+				"2019",
+				"2019",
+				[]Description{
+					{
+						"sdgsdfgdsfgsdgsdgsdfgsdf",
+					},
+				},
+			},
+		},
 	}
 
-	st := PrettyPrintStruct(w)
+	st := PrettyPrint(w)
 
 	return st
 }
@@ -209,13 +232,22 @@ func work() string {
 func projects() string {
 	p := Projects{
 		"Projects",
-		"",
-		"",
-		"",
-		"",
+		[]Project{
+			{
+				"",
+				"",
+				"df",
+				[]Skill{
+					{
+						"",
+					},
+				},
+				"www.hello.com",
+			},
+		},
 	}
 
-	st := PrettyPrintStruct(p)
+	st := PrettyPrint(p)
 
 	return st
 }
@@ -223,13 +255,17 @@ func projects() string {
 func publications() string {
 	p := Publications{
 		"Publications",
-		"",
-		"",
-		"",
-		"",
+		[]Publication{
+			{
+				"",
+				"",
+				"",
+				"",
+			},
+		},
 	}
 
-	st := PrettyPrintStruct(p)
+	st := PrettyPrint(p)
 
 	return st
 }
@@ -237,13 +273,16 @@ func publications() string {
 func awards() string {
 	a := Awards{
 		"Awards",
-		"",
-		"",
-		"",
-		"",
+		[]Award{
+			{
+				"",
+				"",
+				"",
+			},
+		},
 	}
 
-	st := PrettyPrintStruct(a)
+	st := PrettyPrint(a)
 
 	return st
 }
@@ -333,8 +372,9 @@ func commands() {
 	}
 }
 
-func PrettyPrintStruct(i interface{}) string {
-	s, _ := json.MarshalIndent(i, "\n", "    ")
-	d := fmt.Sprintf("%s", s)
+// We have to marshall the structs so that we can pretty print it as json
+func PrettyPrint(i interface{}) string {
+	s, _ := json.MarshalIndent(i, "", "    ")
+	d := fmt.Sprintf("\n%s", s)
 	return d
 }
