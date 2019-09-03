@@ -3,18 +3,47 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/jinzhu/configor"
 	"github.com/urfave/cli"
 	"os"
 )
 
+var Config = struct {
+	App string `default:"app"`
+	Version string `default:"version"`
+	Author  string `default:"author"`
+	Email   string `default:"email"`
+	Usage   string `default:"usage"`
+
+	Data struct {
+		Contact      Contact      `default:"contact"`
+		About        About        `default:"about"`
+		Education    Education    `default:"education"`
+		Skills       Skills       `default:"skills"`
+		Works        Works        `default:"works"`
+		Projects     Projects     `default:"projects"`
+		Publications Publications `default:"publications"`
+		Awards       Awards       `default:"awards"`
+	}
+}{}
+
+func getConf() {
+	err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&Config, "conf.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_ = configor.Load(&Config, "conf.json")
+}
+
 type Resume struct {
-	Contact      Contact `json:"contact"`
-	Skills       Skills `json:"skills"`
-	Work         Works `json:"work"`
-	Projects     Projects `json:"projects"`
-	Education    Education `json:"education"`
+	Contact      Contact      `json:"contact"`
+	Skills       Skills       `json:"skills"`
+	Work         Works        `json:"work"`
+	Projects     Projects     `json:"projects"`
+	Education    Education    `json:"education"`
 	Publications Publications `json:"publications"`
-	Awards       Awards `json:"awards"`
+	Awards       Awards       `json:"awards"`
 }
 
 type Contact struct {
@@ -34,11 +63,12 @@ type About struct {
 }
 
 type Education struct {
-	Section    string  `json:"section"`
-	University string  `json:"university"`
-	Major      string  `json:"major"`
-	GPA        float32 `json:"gpa"`
-	Year       int     `json:"year"`
+	Section        string  `json:"section"`
+	UniversityName string  `json:"university_name"`
+	UniversityAbbr string  `json:"university_abbr"`
+	Major          string  `json:"major"`
+	GPA            float32 `json:"gpa"`
+	Year           int     `json:"year"`
 }
 
 type Skills struct {
@@ -105,6 +135,7 @@ type Award struct {
 var app = cli.NewApp()
 
 func main() {
+	getConf()
 	info()
 	commands()
 
@@ -115,11 +146,11 @@ func main() {
 }
 
 func info() {
-	app.Name = "GoRes"
-	app.Version = "1.0.0"
-	app.Author = "Juan Rios"
-	app.Email = "juansebrios@gmail.com"
-	app.Usage = "gores resume-section"
+	app.Name = Config.App
+	app.Version = Config.Version
+	app.Author = Config.Author
+	app.Email = Config.Email
+	app.Usage = Config.Usage
 }
 
 func resume() Resume {
@@ -165,6 +196,7 @@ func education() Education {
 	e := Education{
 		"Education",
 		"New Jersey Institute of Technology",
+		"NJIT",
 		"Human-computer Interaction",
 		3.84,
 		2018,
