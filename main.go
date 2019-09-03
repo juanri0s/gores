@@ -3,17 +3,139 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/jinzhu/configor"
 	"github.com/urfave/cli"
 	"os"
 )
 
+var Config = struct {
+	App string `default:"app"`
+	Version string `default:"version"`
+	Author  string `default:"author"`
+	Email   string `default:"email"`
+	Usage   string `default:"usage"`
+
+	Data struct {
+		Contact      Contact      `default:"contact"`
+		About        About        `default:"about"`
+		Education    Education    `default:"education"`
+		Skills       Skills       `default:"skills"`
+		Works        Works        `default:"works"`
+		Projects     Projects     `default:"projects"`
+		Publications Publications `default:"publications"`
+		Awards       Awards       `default:"awards"`
+	}
+}{}
+
+func getConf() {
+	err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&Config, "conf.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	_ = configor.Load(&Config, "conf.json")
+}
+
+type Resume struct {
+	Contact      Contact      `json:"contact"`
+	Skills       Skills       `json:"skills"`
+	Work         Works        `json:"work"`
+	Projects     Projects     `json:"projects"`
+	Education    Education    `json:"education"`
+	Publications Publications `json:"publications"`
+	Awards       Awards       `json:"awards"`
+}
+
+type Contact struct {
+	Section         string `json:"section"`
+	Name            string `json:"name"`
+	Email           string `json:"email"`
+	Site            string `json:"site"`
+	Github          string `json:"github"`
+	Linkedin        string `json:"linkedin"`
+	IsLookingForJob bool   `json:"isLookingForJob"`
+}
+
+type About struct {
+	Section string `json:"section"`
+	Short   string `json:"short"`
+	Long    string `json:"long"`
+}
+
+type Education struct {
+	Section        string  `json:"section"`
+	UniversityName string  `json:"university_name"`
+	UniversityAbbr string  `json:"university_abbr"`
+	Major          string  `json:"major"`
+	GPA            float32 `json:"gpa"`
+	Year           int     `json:"year"`
+}
+
+type Skills struct {
+	Section string  `json:"section"`
+	Skills  []Skill `json:"skills"`
+}
+
+type Skill struct {
+	Skill string `json:"skillName"`
+}
+
+type Works struct {
+	Section string `json:"section"`
+	Works   []Work `json:"work"`
+}
+
+type Work struct {
+	Company      string        `json:"company"`
+	Start        string        `json:"startDate"`
+	Finish       string        `json:"finishDate"`
+	Descriptions []Description `json:"description"`
+}
+
+type Description struct {
+	Description string `json:"description"`
+}
+
+type Projects struct {
+	Section  string    `json:"section"`
+	Projects []Project `json:"projects"`
+}
+
+type Project struct {
+	Name        string  `json:"name"`
+	Year        string  `json:"year"`
+	Description string  `json:"description"`
+	Skills      []Skill `json:"skillsUsed"`
+	Link        string  `json:"link"`
+}
+
+type Publications struct {
+	Section      string        `json:"section"`
+	Publications []Publication `json:"publications"`
+}
+
+type Publication struct {
+	Title   string `json:"title"`
+	Authors string `json:"authors"`
+	Year    string `json:"year"`
+	Venue   string `json:"venue"`
+}
+
+type Awards struct {
+	Section string  `json:"section"`
+	Awards  []Award `json:"awards"`
+}
+
+type Award struct {
+	Name        string `json:"name"`
+	Year        string `json:"year"`
+	Description string `json:"description"`
+}
+
 var app = cli.NewApp()
 
-// TODO: add colors for logging
-
 func main() {
-	fmt.Println("Starting GoRes")
-
+	getConf()
 	info()
 	commands()
 
@@ -24,82 +146,181 @@ func main() {
 }
 
 func info() {
-	app.Name = "GoRes"
-	app.Version = "1.0.0"
-	app.Author = "Juan Rios"
-	app.Email = "juansebrios@gmail.com"
-	app.Usage = "gores resume-section"
+	app.Name = Config.App
+	app.Version = Config.Version
+	app.Author = Config.Author
+	app.Email = Config.Email
+	app.Usage = Config.Usage
 }
 
-type Contact struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Site     string `json:"site"`
-	Github   string `json:"github"`
-	Linkedin string `json:"linkedin"`
-}
+func resume() Resume {
 
-// TODO: fix types and create models? for them
-func contact() {
-	co := Contact{
-		"Juan Rios",
-		"sdasd",
-		"sdfdf",
-		"asdfdfsd",
-		"sdfsdf",
+	r := Resume{
+		contact(),
+		skills(),
+		work(),
+		projects(),
+		education(),
+		publications(),
+		awards(),
 	}
 
-	PrettyPrintStruct(&co)
+	return r
 }
 
-func about() string {
-	// return quick description, maybe add flags for a short, medium, and long version
-	return "return"
+func contact() Contact {
+	c := Contact{
+		"Contact",
+		"Juan Rios",
+		"juansebrios@gmail.com",
+		"https://juanri0s.github.io",
+		"https://github.com/juanri0s",
+		"https://www.linkedin.com/in/jsrios",
+		true,
+	}
+
+	return c
 }
 
-func education() string {
-	// return kv pair of education including major, year graduated, GPA
-	return "return"
+func about() About {
+	a := About{
+		"About",
+		"",
+		"",
+	}
+
+	return a
 }
 
-func skills() string {
-	// return kv pair of skills, years experience, and maybe a project that shows it
-	return "return"
+func education() Education {
+	e := Education{
+		"Education",
+		"New Jersey Institute of Technology",
+		"NJIT",
+		"Human-computer Interaction",
+		3.84,
+		2018,
+	}
+
+	return e
 }
 
-func work() string {
-	// return kv pair of company, years, and bullet descriptions
-	return "return"
+func skills() Skills {
+	s := Skills{
+		"Skills",
+		[]Skill{
+			{
+				"Angular",
+			},
+			{
+				"React",
+			},
+		},
+	}
+
+	return s
 }
 
-func projects() string {
-	// return kv pair of project, link, skills, year
-	return "return"
+func work() Works {
+	w := Works{
+		"Work Experience",
+		[]Work{
+			{
+				"UPS",
+				"2019",
+				"2019",
+				[]Description{
+					{
+						"adfasffasfagfagdfgdsfg",
+					},
+				},
+			},
+			{
+				"Carnegie Mellon",
+				"2019",
+				"2019",
+				[]Description{
+					{
+						"sdgsdfgdsfgsdgsdgsdfgsdf",
+					},
+				},
+			},
+		},
+	}
+
+	return w
 }
 
-func publications() string {
-	// create kv of publication title, year, venue, authors
-	return "return"
+func projects() Projects {
+	p := Projects{
+		"Projects",
+		[]Project{
+			{
+				"",
+				"",
+				"df",
+				[]Skill{
+					{
+						"",
+					},
+				},
+				"www.hello.com",
+			},
+		},
+	}
+
+	return p
 }
 
-func awards() string {
-	// create kv pair of award, year, company, description
-	return "return"
+func publications() Publications {
+	p := Publications{
+		"Publications",
+		[]Publication{
+			{
+				"",
+				"",
+				"",
+				"",
+			},
+		},
+	}
+
+	return p
 }
 
-func download() string {
-	// download resume as pdf, might be hard to store on here so maybe we'll find a way to retrieve the latest
-	return "return"
+func awards() Awards {
+	a := Awards{
+		"Awards",
+		[]Award{
+			{
+				"",
+				"",
+				"",
+			},
+		},
+	}
+
+	return a
 }
 
 func commands() {
 	app.Commands = []cli.Command{
 		{
+			Name:    "resume",
+			Aliases: []string{"r"},
+			Usage:   "Full Resume",
+			Action: func(c *cli.Context) {
+				r := resume()
+				PrettyPrint(r)
+			},
+		},
+		{
 			Name:    "contact",
 			Aliases: []string{"c"},
 			Usage:   "Contact me",
 			Action: func(c *cli.Context) {
-				contact()
+				ct := contact()
+				PrettyPrint(ct)
 			},
 		},
 		{
@@ -107,7 +328,8 @@ func commands() {
 			Aliases: []string{"ab"},
 			Usage:   "About me",
 			Action: func(c *cli.Context) {
-				about()
+				a := about()
+				PrettyPrint(a)
 			},
 		},
 		{
@@ -115,7 +337,8 @@ func commands() {
 			Aliases: []string{"e"},
 			Usage:   "View my education",
 			Action: func(c *cli.Context) {
-				education()
+				e := education()
+				PrettyPrint(e)
 			},
 		},
 		{
@@ -123,7 +346,8 @@ func commands() {
 			Aliases: []string{"s"},
 			Usage:   "View my skills",
 			Action: func(c *cli.Context) {
-				skills()
+				s := skills()
+				PrettyPrint(s)
 			},
 		},
 		{
@@ -131,7 +355,8 @@ func commands() {
 			Aliases: []string{"w"},
 			Usage:   "View my work experience",
 			Action: func(c *cli.Context) {
-				work()
+				w := work()
+				PrettyPrint(w)
 			},
 		},
 		{
@@ -139,7 +364,8 @@ func commands() {
 			Aliases: []string{"p"},
 			Usage:   "View my projects",
 			Action: func(c *cli.Context) {
-				projects()
+				p := projects()
+				PrettyPrint(p)
 			},
 		},
 		{
@@ -147,7 +373,8 @@ func commands() {
 			Aliases: []string{"pubs"},
 			Usage:   "View my publications",
 			Action: func(c *cli.Context) {
-				publications()
+				p := publications()
+				PrettyPrint(p)
 			},
 		},
 		{
@@ -155,21 +382,15 @@ func commands() {
 			Aliases: []string{"a"},
 			Usage:   "View my awards",
 			Action: func(c *cli.Context) {
-				awards()
-			},
-		},
-		{
-			Name:    "pdf",
-			Aliases: []string{"pdf"},
-			Usage:   "Download resume as PDF",
-			Action: func(c *cli.Context) {
-				download()
+				a := awards()
+				PrettyPrint(a)
 			},
 		},
 	}
 }
 
-func PrettyPrintStruct(i interface{}) {
-	s, _ := json.MarshalIndent(i, "", "\t")
-	fmt.Printf("%s \n", s)
+// turns out structs into clean json
+func PrettyPrint(i interface{}) {
+	s, _ := json.MarshalIndent(i, "", "  ")
+	fmt.Println(string(s))
 }
