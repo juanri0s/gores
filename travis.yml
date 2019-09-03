@@ -1,8 +1,16 @@
+language: go
+go:
+  - "1.12.x"
+
 matrix:
   include:
-    - language: go
-      go: 1.9.x
+    - go: "1.10.x"
+      script:  go test -v ./...
+    - go: "1.11.x"
+      script: go test -v -mod=vendor ./...
 
-notifications:
-  email:
-    - juan.rios.28@gmail.com
+env:
+  - GO111MODULE=on
+
+script: go test -v -mod=vendor ./...
+
