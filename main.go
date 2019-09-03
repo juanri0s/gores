@@ -9,7 +9,7 @@ import (
 )
 
 var Config = struct {
-	App string `default:"app"`
+	App     string `default:"app"`
 	Version string `default:"version"`
 	Author  string `default:"author"`
 	Email   string `default:"email"`
@@ -19,11 +19,9 @@ var Config = struct {
 		Contact      Contact      `default:"contact"`
 		About        About        `default:"about"`
 		Education    Education    `default:"education"`
-		Skills       Skills       `default:"skills"`
 		Works        Works        `default:"works"`
 		Projects     Projects     `default:"projects"`
 		Publications Publications `default:"publications"`
-		Awards       Awards       `default:"awards"`
 	}
 }{}
 
@@ -38,12 +36,10 @@ func getConf() {
 
 type Resume struct {
 	Contact      Contact      `json:"contact"`
-	Skills       Skills       `json:"skills"`
 	Work         Works        `json:"work"`
 	Projects     Projects     `json:"projects"`
 	Education    Education    `json:"education"`
 	Publications Publications `json:"publications"`
-	Awards       Awards       `json:"awards"`
 }
 
 type Contact struct {
@@ -71,15 +67,6 @@ type Education struct {
 	Year           int     `json:"year"`
 }
 
-type Skills struct {
-	Section string  `json:"section"`
-	Skills  []Skill `json:"skills"`
-}
-
-type Skill struct {
-	Skill string `json:"skillName"`
-}
-
 type Works struct {
 	Section string `json:"section"`
 	Works   []Work `json:"work"`
@@ -102,11 +89,11 @@ type Projects struct {
 }
 
 type Project struct {
-	Name        string  `json:"name"`
-	Year        string  `json:"year"`
-	Description string  `json:"description"`
-	Skills      []Skill `json:"skillsUsed"`
-	Link        string  `json:"link"`
+	Name        string `json:"name"`
+	Year        string `json:"year"`
+	Description string `json:"description"`
+	Skills      string `json:"skills"`
+	Link        string `json:"link"`
 }
 
 type Publications struct {
@@ -115,21 +102,9 @@ type Publications struct {
 }
 
 type Publication struct {
-	Title   string `json:"title"`
-	Authors string `json:"authors"`
-	Year    string `json:"year"`
-	Venue   string `json:"venue"`
-}
-
-type Awards struct {
-	Section string  `json:"section"`
-	Awards  []Award `json:"awards"`
-}
-
-type Award struct {
-	Name        string `json:"name"`
-	Year        string `json:"year"`
-	Description string `json:"description"`
+	Title string `json:"title"`
+	Year  string `json:"year"`
+	Venue string `json:"venue"`
 }
 
 var app = cli.NewApp()
@@ -157,12 +132,10 @@ func resume() Resume {
 
 	r := Resume{
 		contact(),
-		skills(),
 		work(),
 		projects(),
 		education(),
 		publications(),
-		awards(),
 	}
 
 	return r
@@ -205,22 +178,6 @@ func education() Education {
 	return e
 }
 
-func skills() Skills {
-	s := Skills{
-		"Skills",
-		[]Skill{
-			{
-				"Angular",
-			},
-			{
-				"React",
-			},
-		},
-	}
-
-	return s
-}
-
 func work() Works {
 	w := Works{
 		"Work Experience",
@@ -259,11 +216,7 @@ func projects() Projects {
 				"",
 				"",
 				"df",
-				[]Skill{
-					{
-						"",
-					},
-				},
+				"",
 				"www.hello.com",
 			},
 		},
@@ -280,27 +233,11 @@ func publications() Publications {
 				"",
 				"",
 				"",
-				"",
 			},
 		},
 	}
 
 	return p
-}
-
-func awards() Awards {
-	a := Awards{
-		"Awards",
-		[]Award{
-			{
-				"",
-				"",
-				"",
-			},
-		},
-	}
-
-	return a
 }
 
 func commands() {
@@ -342,15 +279,6 @@ func commands() {
 			},
 		},
 		{
-			Name:    "skills",
-			Aliases: []string{"s"},
-			Usage:   "View my skills",
-			Action: func(c *cli.Context) {
-				s := skills()
-				PrettyPrint(s)
-			},
-		},
-		{
 			Name:    "work",
 			Aliases: []string{"w"},
 			Usage:   "View my work experience",
@@ -377,19 +305,10 @@ func commands() {
 				PrettyPrint(p)
 			},
 		},
-		{
-			Name:    "awards",
-			Aliases: []string{"a"},
-			Usage:   "View my awards",
-			Action: func(c *cli.Context) {
-				a := awards()
-				PrettyPrint(a)
-			},
-		},
 	}
 }
 
-// turns out structs into clean json
+// turns our structs into clean json
 func PrettyPrint(i interface{}) {
 	s, _ := json.MarshalIndent(i, "", "  ")
 	fmt.Println(string(s))
