@@ -7,22 +7,14 @@ import (
 	"os"
 )
 
-func info() {
-	app.Name = "GoRes"
-	app.Version = "1.0.0"
-	app.Author = "Juan Rios"
-	app.Email = "juansebrios@gmail.com"
-	app.Usage = "gores resume-section"
-}
-
 type Resume struct {
-	Contact      string `json:"contact"`
-	Skills       string `json:"skills"`
-	Work         string `json:"work"`
-	Projects     string `json:"projects"`
-	Education    string `json:"education"`
-	Publications string `json:"publications"`
-	Awards       string `json:"awards"`
+	Contact      Contact `json:"contact"`
+	Skills       Skills `json:"skills"`
+	Work         Works `json:"work"`
+	Projects     Projects `json:"projects"`
+	Education    Education `json:"education"`
+	Publications Publications `json:"publications"`
+	Awards       Awards `json:"awards"`
 }
 
 type Contact struct {
@@ -122,7 +114,15 @@ func main() {
 	}
 }
 
-func resume() {
+func info() {
+	app.Name = "GoRes"
+	app.Version = "1.0.0"
+	app.Author = "Juan Rios"
+	app.Email = "juansebrios@gmail.com"
+	app.Usage = "gores resume-section"
+}
+
+func resume() Resume {
 
 	r := Resume{
 		contact(),
@@ -134,52 +134,46 @@ func resume() {
 		awards(),
 	}
 
-	fmt.Println("\n Summer 2019 Resume:", r)
+	return r
 }
 
-func contact() string {
+func contact() Contact {
 	c := Contact{
 		"Contact",
 		"Juan Rios",
 		"juansebrios@gmail.com",
-		"https://juanri0s.github.io/",
+		"https://juanri0s.github.io",
 		"https://github.com/juanri0s",
-		"https://www.linkedin.com/in/jsrios/",
+		"https://www.linkedin.com/in/jsrios",
 		true,
 	}
 
-	st := PrettyPrint(c)
-
-	return st
+	return c
 }
 
-func about() string {
+func about() About {
 	a := About{
 		"About",
 		"",
 		"",
 	}
 
-	st := PrettyPrint(a)
-
-	return st
+	return a
 }
 
-func education() string {
+func education() Education {
 	e := Education{
-		"Contact",
+		"Education",
 		"New Jersey Institute of Technology",
 		"Human-computer Interaction",
 		3.84,
 		2018,
 	}
 
-	st := PrettyPrint(e)
-
-	return st
+	return e
 }
 
-func skills() string {
+func skills() Skills {
 	s := Skills{
 		"Skills",
 		[]Skill{
@@ -187,17 +181,15 @@ func skills() string {
 				"Angular",
 			},
 			{
-				"Angular",
+				"React",
 			},
 		},
 	}
 
-	st := PrettyPrint(s)
-
-	return st
+	return s
 }
 
-func work() string {
+func work() Works {
 	w := Works{
 		"Work Experience",
 		[]Work{
@@ -224,12 +216,10 @@ func work() string {
 		},
 	}
 
-	st := PrettyPrint(w)
-
-	return st
+	return w
 }
 
-func projects() string {
+func projects() Projects {
 	p := Projects{
 		"Projects",
 		[]Project{
@@ -247,12 +237,10 @@ func projects() string {
 		},
 	}
 
-	st := PrettyPrint(p)
-
-	return st
+	return p
 }
 
-func publications() string {
+func publications() Publications {
 	p := Publications{
 		"Publications",
 		[]Publication{
@@ -265,12 +253,10 @@ func publications() string {
 		},
 	}
 
-	st := PrettyPrint(p)
-
-	return st
+	return p
 }
 
-func awards() string {
+func awards() Awards {
 	a := Awards{
 		"Awards",
 		[]Award{
@@ -282,9 +268,7 @@ func awards() string {
 		},
 	}
 
-	st := PrettyPrint(a)
-
-	return st
+	return a
 }
 
 func commands() {
@@ -294,7 +278,8 @@ func commands() {
 			Aliases: []string{"r"},
 			Usage:   "Full Resume",
 			Action: func(c *cli.Context) {
-				resume()
+				r := resume()
+				PrettyPrint(r)
 			},
 		},
 		{
@@ -303,7 +288,7 @@ func commands() {
 			Usage:   "Contact me",
 			Action: func(c *cli.Context) {
 				ct := contact()
-				fmt.Println(ct)
+				PrettyPrint(ct)
 			},
 		},
 		{
@@ -312,7 +297,7 @@ func commands() {
 			Usage:   "About me",
 			Action: func(c *cli.Context) {
 				a := about()
-				fmt.Println(a)
+				PrettyPrint(a)
 			},
 		},
 		{
@@ -321,7 +306,7 @@ func commands() {
 			Usage:   "View my education",
 			Action: func(c *cli.Context) {
 				e := education()
-				fmt.Println(e)
+				PrettyPrint(e)
 			},
 		},
 		{
@@ -330,7 +315,7 @@ func commands() {
 			Usage:   "View my skills",
 			Action: func(c *cli.Context) {
 				s := skills()
-				fmt.Println(s)
+				PrettyPrint(s)
 			},
 		},
 		{
@@ -339,7 +324,7 @@ func commands() {
 			Usage:   "View my work experience",
 			Action: func(c *cli.Context) {
 				w := work()
-				fmt.Println(w)
+				PrettyPrint(w)
 			},
 		},
 		{
@@ -348,7 +333,7 @@ func commands() {
 			Usage:   "View my projects",
 			Action: func(c *cli.Context) {
 				p := projects()
-				fmt.Println(p)
+				PrettyPrint(p)
 			},
 		},
 		{
@@ -357,7 +342,7 @@ func commands() {
 			Usage:   "View my publications",
 			Action: func(c *cli.Context) {
 				p := publications()
-				fmt.Println(p)
+				PrettyPrint(p)
 			},
 		},
 		{
@@ -366,15 +351,14 @@ func commands() {
 			Usage:   "View my awards",
 			Action: func(c *cli.Context) {
 				a := awards()
-				fmt.Println(a)
+				PrettyPrint(a)
 			},
 		},
 	}
 }
 
-// We have to marshall the structs so that we can pretty print it as json
-func PrettyPrint(i interface{}) string {
-	s, _ := json.MarshalIndent(i, "", "    ")
-	d := fmt.Sprintf("\n%s", s)
-	return d
+// turns out structs into clean json
+func PrettyPrint(i interface{}) {
+	s, _ := json.MarshalIndent(i, "", "  ")
+	fmt.Println(string(s))
 }
