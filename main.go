@@ -6,6 +6,8 @@ import (
 	"github.com/jinzhu/configor"
 	"github.com/urfave/cli"
 	"os"
+	"sort"
+	"time"
 )
 
 var Config = struct {
@@ -16,12 +18,12 @@ var Config = struct {
 	Usage   string `default:"usage"`
 
 	Data struct {
-		Contact      Contact      `default:"contact"`
-		About        About        `default:"about"`
-		Education    Education    `default:"education"`
-		Experience   Experience   `default:"experience"`
-		Projects     Projects     `default:"projects"`
-		Publications Publications `default:"publications"`
+		Contact        Contact        `default:"contact"`
+		About          About          `default:"about"`
+		Education      Education      `default:"education"`
+		WorkExperience WorkExperience `default:"workExperience"`
+		Projects       Projects       `default:"projects"`
+		Publications   Publications   `default:"publications"`
 	}
 }{}
 
@@ -35,11 +37,11 @@ func getConf() {
 }
 
 type Resume struct {
-	Contact      Contact      `json:"contact"`
-	Experience   Experience   `json:"experience"`
-	Projects     Projects     `json:"projects"`
-	Education    Education    `json:"education"`
-	Publications Publications `json:"publications"`
+	Contact        Contact        `json:"contact"`
+	WorkExperience WorkExperience `json:"workExperience"`
+	Projects       Projects       `json:"projects"`
+	Education      Education      `json:"education"`
+	Publications   Publications   `json:"publications"`
 }
 
 type Contact struct {
@@ -67,20 +69,16 @@ type Education struct {
 	Year           int     `json:"year"`
 }
 
+type WorkExperience struct {
+	Section    string       `json:"section"`
+	Experience []Experience `json:"experience"`
+}
+
 type Experience struct {
-	Section    string        `json:"section"`
-	Experience []Experiences `json:"experiences"`
-}
-
-type Experiences struct {
-	Company      string        `json:"company"`
-	Role         string        `json:"role"`
-	Start        string        `json:"startDate"`
-	Finish       string        `json:"finishDate"`
-}
-
-type Description struct {
-	Description string `json:"description"`
+	Company    string `json:"company"`
+	Role       string `json:"role"`
+	StartDate  string `json:"startDate"`
+	FinishDate string `json:"finishDate"`
 }
 
 type Projects struct {
@@ -129,7 +127,6 @@ func info() {
 }
 
 func resume() Resume {
-
 	r := Resume{
 		contact(),
 		experience(),
@@ -178,21 +175,33 @@ func education() Education {
 	return e
 }
 
-func experience() Experience {
-
-	w := Experience{
-		Config.Data.Experience.Section,
-		[]Experiences{
+func experience() WorkExperience {
+	w := WorkExperience{
+		Config.Data.WorkExperience.Section,
+		[]Experience{
 		},
 	}
 
-	for _, exp := range Config.Data.Experience.Experience {
+	for _, exp := range Config.Data.WorkExperience.Experience {
 		w.Experience = append(w.Experience, exp)
 	}
 
-	// TODO: sort by date...
+	// Sort the work experience chronologically based on a parsed date string of month and year
+	sort.Slice(w.Experience, func(i, j int) bool {
+		return ParseDateString(w.Experience[i].StartDate).After(ParseDateString(w.Experience[j].StartDate))
+	})
 
 	return w
+}
+
+func ParseDateString(d string) time.Time {
+
+	time, err := time.Parse("January 2006", d)
+	if err != nil {
+		panic(err)
+	}
+
+	return time
 }
 
 func projects() Projects {
