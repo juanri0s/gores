@@ -2,14 +2,6 @@
 
 # GoRes
 
-`gores` is a resume viewer written in Go.
+`gores` is a CLI resume written in Go.
 
 ![Sample JSON image of gores](/gores.png)
-
-## Getting Started
-
-### Installing
-
-### Usage
-
-### In Progress
