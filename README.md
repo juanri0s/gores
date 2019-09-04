@@ -4,6 +4,8 @@
 
 `gores` is a resume viewer written in Go.
 
+![Sample JSON image of gores](/gores.png)
+
 ## Getting Started
 
 ### Installing
