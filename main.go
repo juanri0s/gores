@@ -19,7 +19,7 @@ var Config = struct {
 		Contact      Contact      `default:"contact"`
 		About        About        `default:"about"`
 		Education    Education    `default:"education"`
-		Works        Works        `default:"works"`
+		Experience   Experience   `default:"experience"`
 		Projects     Projects     `default:"projects"`
 		Publications Publications `default:"publications"`
 	}
@@ -28,7 +28,7 @@ var Config = struct {
 func getConf() {
 	err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&Config, "conf.json")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("error parsing config:", err)
 	}
 
 	_ = configor.Load(&Config, "conf.json")
@@ -36,7 +36,7 @@ func getConf() {
 
 type Resume struct {
 	Contact      Contact      `json:"contact"`
-	Work         Works        `json:"work"`
+	Experience   Experience   `json:"experience"`
 	Projects     Projects     `json:"projects"`
 	Education    Education    `json:"education"`
 	Publications Publications `json:"publications"`
@@ -67,16 +67,16 @@ type Education struct {
 	Year           int     `json:"year"`
 }
 
-type Works struct {
-	Section string `json:"section"`
-	Works   []Work `json:"work"`
+type Experience struct {
+	Section    string        `json:"section"`
+	Experience []Experiences `json:"experiences"`
 }
 
-type Work struct {
+type Experiences struct {
 	Company      string        `json:"company"`
+	Role         string        `json:"role"`
 	Start        string        `json:"startDate"`
 	Finish       string        `json:"finishDate"`
-	Descriptions []Description `json:"description"`
 }
 
 type Description struct {
@@ -132,7 +132,7 @@ func resume() Resume {
 
 	r := Resume{
 		contact(),
-		work(),
+		experience(),
 		projects(),
 		education(),
 		publications(),
@@ -143,13 +143,13 @@ func resume() Resume {
 
 func contact() Contact {
 	c := Contact{
-		"Contact",
-		"Juan Rios",
-		"juansebrios@gmail.com",
-		"https://juanri0s.github.io",
-		"https://github.com/juanri0s",
-		"https://www.linkedin.com/in/jsrios",
-		true,
+		Config.Data.Contact.Section,
+		Config.Data.Contact.Name,
+		Config.Data.Contact.Email,
+		Config.Data.Contact.Site,
+		Config.Data.Contact.Github,
+		Config.Data.Contact.Linkedin,
+		Config.Data.Contact.IsLookingForJob,
 	}
 
 	return c
@@ -157,9 +157,9 @@ func contact() Contact {
 
 func about() About {
 	a := About{
-		"About",
-		"",
-		"",
+		Config.Data.About.Section,
+		Config.Data.About.Short,
+		Config.Data.About.Long,
 	}
 
 	return a
@@ -167,59 +167,43 @@ func about() About {
 
 func education() Education {
 	e := Education{
-		"Education",
-		"New Jersey Institute of Technology",
-		"NJIT",
-		"Human-computer Interaction",
-		3.84,
-		2018,
+		Config.Data.Education.Section,
+		Config.Data.Education.UniversityName,
+		Config.Data.Education.UniversityAbbr,
+		Config.Data.Education.Major,
+		Config.Data.Education.GPA,
+		Config.Data.Education.Year,
 	}
 
 	return e
 }
 
-func work() Works {
-	w := Works{
-		"Work Experience",
-		[]Work{
-			{
-				"UPS",
-				"2019",
-				"2019",
-				[]Description{
-					{
-						"adfasffasfagfagdfgdsfg",
-					},
-				},
-			},
-			{
-				"Carnegie Mellon",
-				"2019",
-				"2019",
-				[]Description{
-					{
-						"sdgsdfgdsfgsdgsdgsdfgsdf",
-					},
-				},
-			},
+func experience() Experience {
+
+	w := Experience{
+		Config.Data.Experience.Section,
+		[]Experiences{
 		},
 	}
+
+	for _, exp := range Config.Data.Experience.Experience {
+		w.Experience = append(w.Experience, exp)
+	}
+
+	// TODO: sort by date...
 
 	return w
 }
 
 func projects() Projects {
 	p := Projects{
-		"Projects",
+		Config.Data.Projects.Section,
 		[]Project{
-			{
-				"",
-				"",
-				"df",
-				"",
-				"www.hello.com",
-			},
 		},
+	}
+
+	for _, exp := range Config.Data.Projects.Projects {
+		p.Projects = append(p.Projects, exp)
 	}
 
 	return p
@@ -227,14 +211,13 @@ func projects() Projects {
 
 func publications() Publications {
 	p := Publications{
-		"Publications",
+		Config.Data.Publications.Section,
 		[]Publication{
-			{
-				"",
-				"",
-				"",
-			},
 		},
+	}
+
+	for _, exp := range Config.Data.Publications.Publications {
+		p.Publications = append(p.Publications, exp)
 	}
 
 	return p
@@ -279,12 +262,12 @@ func commands() {
 			},
 		},
 		{
-			Name:    "work",
-			Aliases: []string{"w"},
+			Name:    "experience",
+			Aliases: []string{"ex"},
 			Usage:   "View my work experience",
 			Action: func(c *cli.Context) {
-				w := work()
-				PrettyPrint(w)
+				e := experience()
+				PrettyPrint(e)
 			},
 		},
 		{
