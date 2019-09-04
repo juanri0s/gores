@@ -27,15 +27,6 @@ var Config = struct {
 	}
 }{}
 
-func getConf() {
-	err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&Config, "conf.json")
-	if err != nil {
-		fmt.Println("error parsing config:", err)
-	}
-
-	_ = configor.Load(&Config, "conf.json")
-}
-
 type Resume struct {
 	Contact        Contact        `json:"contact"`
 	WorkExperience WorkExperience `json:"workExperience"`
@@ -105,7 +96,17 @@ type Publication struct {
 	Venue string `json:"venue"`
 }
 
+func getConf() {
+	err := configor.New(&configor.Config{ErrorOnUnmatchedKeys: true}).Load(&Config, "conf.json")
+	if err != nil {
+		fmt.Println("error parsing config:", err)
+	}
+
+	_ = configor.Load(&Config, "conf.json")
+}
+
 var app = cli.NewApp()
+
 
 func main() {
 	getConf()
@@ -232,6 +233,32 @@ func publications() Publications {
 	return p
 }
 
+func ParseMonthYearToDate(d string) time.Time {
+
+	time, err := time.Parse("January 2006", d)
+	if err != nil {
+		panic(err)
+	}
+
+	return time
+}
+
+func ParseYearToDate(d string) time.Time {
+
+	time, err := time.Parse("2006", d)
+	if err != nil {
+		panic(err)
+	}
+
+	return time
+}
+
+// turns our structs into clean json
+func PrettyPrint(i interface{}) {
+	s, _ := json.MarshalIndent(i, "", "  ")
+	fmt.Println(string(s))
+}
+
 func commands() {
 	app.Commands = []cli.Command{
 		{
@@ -298,30 +325,4 @@ func commands() {
 			},
 		},
 	}
-}
-
-func ParseMonthYearToDate(d string) time.Time {
-
-	time, err := time.Parse("January 2006", d)
-	if err != nil {
-		panic(err)
-	}
-
-	return time
-}
-
-func ParseYearToDate(d string) time.Time {
-
-	time, err := time.Parse("2006", d)
-	if err != nil {
-		panic(err)
-	}
-
-	return time
-}
-
-// turns our structs into clean json
-func PrettyPrint(i interface{}) {
-	s, _ := json.MarshalIndent(i, "", "  ")
-	fmt.Println(string(s))
 }
