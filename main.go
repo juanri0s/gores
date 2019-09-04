@@ -187,7 +187,6 @@ func experience() WorkExperience {
 		w.Experience = append(w.Experience, exp)
 	}
 
-	// Sort the work experience chronologically based on a parsed date string of month and year
 	sort.Slice(w.Experience, func(i, j int) bool {
 		return ParseMonthYearToDate(w.Experience[i].StartDate).After(ParseMonthYearToDate(w.Experience[j].StartDate))
 	})
@@ -206,7 +205,6 @@ func projects() Projects {
 		p.Projects = append(p.Projects, exp)
 	}
 
-	// Sort the work experience chronologically based on a parsed date string of month and year
 	sort.Slice(p.Projects, func(i, j int) bool {
 		return ParseYearToDate(p.Projects[i].Year).After(ParseYearToDate(p.Projects[j].Year))
 	})
@@ -225,7 +223,6 @@ func publications() Publications {
 		p.Publications = append(p.Publications, exp)
 	}
 
-	// Sort the work experience chronologically based on a parsed date string of month and year
 	sort.Slice(p.Publications, func(i, j int) bool {
 		return ParseYearToDate(p.Publications[i].Year).After(ParseYearToDate(p.Publications[j].Year))
 	})
