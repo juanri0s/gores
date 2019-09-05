@@ -68,7 +68,7 @@ func TestPrettyPrint(t *testing.T) {
 }
 
 func TestParseYearToDate(t *testing.T) {
-	t1, _ := time.Parse("2006", "January 2006")
+	t1, _ := time.Parse("2006", "2006")
 	t2, _ := time.Parse("2006", "2006")
 	t3, _ := time.Parse("2006", "1999")
 
