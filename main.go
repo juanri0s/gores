@@ -231,30 +231,28 @@ func publications() Publications {
 
 // ParseMonthYearToDate takes a month year string and converts to time.
 func ParseMonthYearToDate(d string) time.Time {
-
-	time, err := time.Parse("January 2006", d)
+	t, err := time.Parse("January 2006", d)
 	if err != nil {
 		panic(err)
 	}
 
-	return time
+	return t
 }
 
 // ParseYearToDate takes a year string and converts to time.
 func ParseYearToDate(d string) time.Time {
-
-	time, err := time.Parse("2006", d)
+	t, err := time.Parse("2006", d)
 	if err != nil {
 		panic(err)
 	}
 
-	return time
+	return t
 }
 
-// PrettyPrint turns our structs into clean json.
-func PrettyPrint(i interface{}) {
+// PrettyPrint turns our struct into clean json.
+func PrettyPrint(i interface{}) string {
 	s, _ := json.MarshalIndent(i, "", "  ")
-	fmt.Println(string(s))
+	return string(s)
 }
 
 func commands() {
@@ -265,7 +263,8 @@ func commands() {
 			Usage:   "Full Resume",
 			Action: func(c *cli.Context) {
 				r := resume()
-				PrettyPrint(r)
+				re := PrettyPrint(r)
+				fmt.Println(re)
 			},
 		},
 		{
@@ -273,8 +272,9 @@ func commands() {
 			Aliases: []string{"c"},
 			Usage:   "Contact me",
 			Action: func(c *cli.Context) {
-				ct := contact()
-				PrettyPrint(ct)
+				co := contact()
+				con := PrettyPrint(co)
+				fmt.Println(con)
 			},
 		},
 		{
@@ -283,7 +283,9 @@ func commands() {
 			Usage:   "About me",
 			Action: func(c *cli.Context) {
 				a := about()
-				PrettyPrint(a)
+				ab := PrettyPrint(a)
+				fmt.Println(ab)
+
 			},
 		},
 		{
@@ -292,7 +294,8 @@ func commands() {
 			Usage:   "View my education",
 			Action: func(c *cli.Context) {
 				e := education()
-				PrettyPrint(e)
+				ed := PrettyPrint(e)
+				fmt.Println(ed)
 			},
 		},
 		{
@@ -301,7 +304,8 @@ func commands() {
 			Usage:   "View my work experience",
 			Action: func(c *cli.Context) {
 				e := experience()
-				PrettyPrint(e)
+				ex := PrettyPrint(e)
+				fmt.Println(ex)
 			},
 		},
 		{
@@ -310,7 +314,8 @@ func commands() {
 			Usage:   "View my projects",
 			Action: func(c *cli.Context) {
 				p := projects()
-				PrettyPrint(p)
+				pr := PrettyPrint(p)
+				fmt.Println(pr)
 			},
 		},
 		{
@@ -319,7 +324,8 @@ func commands() {
 			Usage:   "View my publications",
 			Action: func(c *cli.Context) {
 				p := publications()
-				PrettyPrint(p)
+				pu := PrettyPrint(p)
+				fmt.Println(pu)
 			},
 		},
 	}
