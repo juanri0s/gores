@@ -8,49 +8,48 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestPrettyPrint(t *testing.T) {
 	type St struct {
 		Name            string `json:"name"`
 		IsLookingForJob bool   `json:"isLookingForJob"`
 	}
 	tests := []struct {
-		name string
+		name     string
 		expected string
-		actual St
+		actual   St
 	}{
 		{
 			"prettyprint from struct test 1",
-			PrettyPrint( St {
-					"Joe",
-					true,
-				},
+			PrettyPrint(St{
+				"Joe",
+				true,
+			},
 			),
-			St {
+			St{
 				"Joe",
 				true,
 			},
 		},
 		{
 			"prettyprint from struct test 2",
-			PrettyPrint( St {
-					"Janice",
-					false,
-				},
+			PrettyPrint(St{
+				"Janice",
+				false,
+			},
 			),
-			St {
+			St{
 				"Janice",
 				false,
 			},
 		},
 		{
 			"prettyprint from struct test 3",
-			PrettyPrint( St {
-					"Jerry",
-					true,
-				},
+			PrettyPrint(St{
+				"Jerry",
+				true,
+			},
 			),
-			St {
+			St{
 				"Jerry",
 				true,
 			},
@@ -132,4 +131,3 @@ func TestParseMonthYearToDate(t *testing.T) {
 		})
 	}
 }
-
