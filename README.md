@@ -5,3 +5,7 @@
 `gores` is a CLI resume written in Go.
 
 ![Sample JSON image of gores](/gores.png)
+
+# Todo
+
+- [ ] key/value colors
