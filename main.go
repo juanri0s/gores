@@ -107,7 +107,6 @@ func getConf() {
 
 var app = cli.NewApp()
 
-
 func main() {
 	getConf()
 	info()
@@ -230,6 +229,7 @@ func publications() Publications {
 	return p
 }
 
+// ParseMonthYearToDate takes a month year string and converts to time.
 func ParseMonthYearToDate(d string) time.Time {
 
 	time, err := time.Parse("January 2006", d)
@@ -240,6 +240,7 @@ func ParseMonthYearToDate(d string) time.Time {
 	return time
 }
 
+// ParseYearToDate takes a year string and converts to time.
 func ParseYearToDate(d string) time.Time {
 
 	time, err := time.Parse("2006", d)
@@ -250,7 +251,7 @@ func ParseYearToDate(d string) time.Time {
 	return time
 }
 
-// turns our structs into clean json
+// PrettyPrint turns our structs into clean json.
 func PrettyPrint(i interface{}) {
 	s, _ := json.MarshalIndent(i, "", "  ")
 	fmt.Println(string(s))
