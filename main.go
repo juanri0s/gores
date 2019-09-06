@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/configor"
 	"github.com/urfave/cli"
+	"os"
 	"sort"
 	"time"
 )
@@ -107,15 +108,14 @@ func getConf() {
 var app = cli.NewApp()
 
 func main() {
-	ParseYearToDate("2019")
-	//getConf()
-	//info()
-	//commands()
-	//
-	//err := app.Run(os.Args)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	getConf()
+	info()
+	commands()
+
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func info() {

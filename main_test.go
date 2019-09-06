@@ -8,61 +8,27 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestPrettyPrint(t *testing.T) {
 	type St struct {
 		Name            string `json:"name"`
 		IsLookingForJob bool   `json:"isLookingForJob"`
 	}
 	tests := []struct {
-		name string
+		name     string
 		expected string
-		actual St
+		actual   St
 	}{
-		{
-			"prettyprint from struct test 1",
-			PrettyPrint( St {
-					"Joe",
-					true,
-				},
-			),
-			St {
-				"Joe",
-				true,
-			},
-		},
-		{
-			"prettyprint from struct test 2",
-			PrettyPrint( St {
-					"Janice",
-					false,
-				},
-			),
-			St {
-				"Janice",
-				false,
-			},
-		},
-		{
-			"prettyprint from struct test 3",
-			PrettyPrint( St {
-					"Jerry",
-					true,
-				},
-			),
-			St {
-				"Jerry",
-				true,
-			},
-		},
+		{"prettyprint from struct test 1", PrettyPrint(St{"Joe", true,}, ), St{"Joe", true,},},
+		{"prettyprint from struct test 2", PrettyPrint(St{"Janice", false,}, ), St{"Janice", false,},},
+		{"prettyprint from struct test 3", PrettyPrint(St{"Jerry", true,}, ), St{"Jerry", true,},},
 	}
-	for _, test := range tests {
+	for _, tt := range tests {
 
-		res, _ := json.MarshalIndent(test.actual, "", "  ")
+		res, _ := json.MarshalIndent(tt.actual, "", "  ")
 		actual := string(res)
 
-		t.Run(test.name, func(t *testing.T) {
-			assert.Equal(t, actual, test.expected, "The prettyprint should be the same as the marshallindent")
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, actual, tt.expected, "The prettyprint should be the same as the marshallindent")
 		})
 	}
 }
@@ -77,25 +43,13 @@ func TestParseYearToDate(t *testing.T) {
 		actual   time.Time
 		expected time.Time
 	}{
-		{
-			"string 2020 to datetime",
-			ParseYearToDate("2020"),
-			t1,
-		},
-		{
-			"string 2005 to datetime",
-			ParseYearToDate("2006"),
-			t2,
-		},
-		{
-			"string 1999 to datetime",
-			ParseYearToDate("1999"),
-			t3,
-		},
+		{"string 2020 to datetime", ParseYearToDate("2020"), t1,},
+		{"string 2005 to datetime", ParseYearToDate("2006"), t2,},
+		{"string 1999 to datetime", ParseYearToDate("1999"), t3,},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			assert.Equal(t, test.actual, test.expected, "The string year should be the same as the datetime.")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.actual, tt.expected, "The string year should be the same as the datetime.")
 		})
 	}
 }
@@ -110,26 +64,13 @@ func TestParseMonthYearToDate(t *testing.T) {
 		actual   time.Time
 		expected time.Time
 	}{
-		{
-			"string March 2020 to datetime",
-			ParseMonthYearToDate("March 2020"),
-			t1,
-		},
-		{
-			"string February2006 to datetime",
-			ParseMonthYearToDate("February 2006"),
-			t2,
-		},
-		{
-			"string December2020 to datetime",
-			ParseMonthYearToDate("December 1999"),
-			t3,
-		},
+		{"string March 2020 to datetime", ParseMonthYearToDate("March 2020"), t1,},
+		{"string February2006 to datetime", ParseMonthYearToDate("February 2006"), t2,},
+		{"string December2020 to datetime", ParseMonthYearToDate("December 1999"), t3,},
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			assert.Equal(t, test.actual, test.expected, "The string monthYear should be the same as the datetime.")
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.actual, tt.expected, "The string monthYear should be the same as the datetime.")
 		})
 	}
 }
-
