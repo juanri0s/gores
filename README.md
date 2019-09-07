@@ -8,4 +8,5 @@
 
 # Todo
 
+- [ ] docker support
 - [ ] key/value colors
