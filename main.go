@@ -3,13 +3,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jinzhu/configor"
-	"github.com/urfave/cli"
 	"os"
 	"sort"
 	"time"
+
+	"github.com/jinzhu/configor"
+	"github.com/urfave/cli"
 )
 
+// Config represents the config file that values are read from.
 var Config = struct {
 	App     string `default:"app"`
 	Version string `default:"version"`
@@ -27,6 +29,7 @@ var Config = struct {
 	}
 }{}
 
+// Resume represents a full resume with every section returned
 type Resume struct {
 	Contact        Contact        `json:"contact"`
 	WorkExperience WorkExperience `json:"workExperience"`
@@ -35,6 +38,7 @@ type Resume struct {
 	Publications   Publications   `json:"publications"`
 }
 
+// Contact represents the contact section of the resume.
 type Contact struct {
 	Section         string `json:"section"`
 	Name            string `json:"name"`
@@ -45,12 +49,14 @@ type Contact struct {
 	IsLookingForJob bool   `json:"isLookingForJob"`
 }
 
+// About represents the about section of the resume.
 type About struct {
 	Section string `json:"section"`
 	Short   string `json:"short"`
 	Long    string `json:"long"`
 }
 
+// Education represents the about section of the resume.
 type Education struct {
 	Section        string  `json:"section"`
 	UniversityName string  `json:"university_name"`
@@ -60,11 +66,13 @@ type Education struct {
 	Year           int     `json:"year"`
 }
 
+// WorkExperience represents the experience section of the resume
 type WorkExperience struct {
 	Section    string       `json:"section"`
 	Experience []Experience `json:"experience"`
 }
 
+// Experience represents a single experience
 type Experience struct {
 	Company    string `json:"company"`
 	Role       string `json:"role"`
@@ -72,11 +80,13 @@ type Experience struct {
 	FinishDate string `json:"finishDate"`
 }
 
+// Projects represents the projects section of the resume
 type Projects struct {
 	Section  string    `json:"section"`
 	Projects []Project `json:"projects"`
 }
 
+// Project represents a single project
 type Project struct {
 	Name        string `json:"name"`
 	Year        string `json:"year"`
@@ -85,11 +95,13 @@ type Project struct {
 	Link        string `json:"link"`
 }
 
+// Publications represents the publications section of the resume.
 type Publications struct {
 	Section      string        `json:"section"`
 	Publications []Publication `json:"publications"`
 }
 
+// Publication represents a single publication.
 type Publication struct {
 	Title string `json:"title"`
 	Year  string `json:"year"`
