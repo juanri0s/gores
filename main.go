@@ -178,8 +178,7 @@ func education() Education {
 func experience() WorkExperience {
 	w := WorkExperience{
 		Config.Data.WorkExperience.Section,
-		[]Experience{
-		},
+		[]Experience{},
 	}
 
 	for _, exp := range Config.Data.WorkExperience.Experience {
@@ -196,8 +195,7 @@ func experience() WorkExperience {
 func projects() Projects {
 	p := Projects{
 		Config.Data.Projects.Section,
-		[]Project{
-		},
+		[]Project{},
 	}
 
 	for _, exp := range Config.Data.Projects.Projects {
@@ -214,8 +212,7 @@ func projects() Projects {
 func publications() Publications {
 	p := Publications{
 		Config.Data.Publications.Section,
-		[]Publication{
-		},
+		[]Publication{},
 	}
 
 	for _, exp := range Config.Data.Publications.Publications {

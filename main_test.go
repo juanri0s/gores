@@ -18,9 +18,9 @@ func TestPrettyPrint(t *testing.T) {
 		expected string
 		actual   St
 	}{
-		{"prettyprint from struct test 1", PrettyPrint(St{"Joe", true,}, ), St{"Joe", true,},},
-		{"prettyprint from struct test 2", PrettyPrint(St{"Janice", false,}, ), St{"Janice", false,},},
-		{"prettyprint from struct test 3", PrettyPrint(St{"Jerry", true,}, ), St{"Jerry", true,},},
+		{"prettyprint from struct test 1", PrettyPrint(St{"Joe", true}), St{"Joe", true}},
+		{"prettyprint from struct test 2", PrettyPrint(St{"Janice", false}), St{"Janice", false}},
+		{"prettyprint from struct test 3", PrettyPrint(St{"Jerry", true}), St{"Jerry", true}},
 	}
 	for _, tt := range tests {
 
@@ -43,9 +43,9 @@ func TestParseYearToDate(t *testing.T) {
 		actual   time.Time
 		expected time.Time
 	}{
-		{"string 2020 to datetime", ParseYearToDate("2020"), t1,},
-		{"string 2005 to datetime", ParseYearToDate("2006"), t2,},
-		{"string 1999 to datetime", ParseYearToDate("1999"), t3,},
+		{"string 2020 to datetime", ParseYearToDate("2020"), t1},
+		{"string 2005 to datetime", ParseYearToDate("2006"), t2},
+		{"string 1999 to datetime", ParseYearToDate("1999"), t3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -64,9 +64,9 @@ func TestParseMonthYearToDate(t *testing.T) {
 		actual   time.Time
 		expected time.Time
 	}{
-		{"string March 2020 to datetime", ParseMonthYearToDate("March 2020"), t1,},
-		{"string February2006 to datetime", ParseMonthYearToDate("February 2006"), t2,},
-		{"string December2020 to datetime", ParseMonthYearToDate("December 1999"), t3,},
+		{"string March 2020 to datetime", ParseMonthYearToDate("March 2020"), t1},
+		{"string February2006 to datetime", ParseMonthYearToDate("February 2006"), t2},
+		{"string December2020 to datetime", ParseMonthYearToDate("December 1999"), t3},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
