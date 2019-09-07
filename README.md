@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/juanri0s/gores.svg?token=9eBACqqKkMnHcyn2HNa7&branch=master)](https://travis-ci.com/juanri0s/gores)
+[![Build Status](https://travis-ci.org/juanri0s/gores.svg?branch=master)](https://travis-ci.org/juanri0s/gores)
 [![Go Report Card](https://goreportcard.com/badge/github.com/juanri0s/gores)](https://goreportcard.com/report/github.com/juanri0s/gores)
 [![GoDoc](https://godoc.org/github.com/juanri0s/gores?status.svg)](https://godoc.org/github.com/juanri0s/gores)
 
