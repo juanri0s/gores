@@ -8,5 +8,7 @@
 
 # Todo
 
+- [ ] adding license information
 - [ ] docker support
 - [ ] key/value colors
+- [ ] download as pdf option
