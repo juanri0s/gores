@@ -198,7 +198,7 @@ func experience() WorkExperience {
 	}
 
 	sort.Slice(w.Experience, func(i, j int) bool {
-		return ParseMonthYearToDate(w.Experience[i].StartDate).After(ParseMonthYearToDate(w.Experience[j].StartDate))
+		return parseMonthYearToDate(w.Experience[i].StartDate).After(parseMonthYearToDate(w.Experience[j].StartDate))
 	})
 
 	return w
@@ -215,7 +215,7 @@ func projects() Projects {
 	}
 
 	sort.Slice(p.Projects, func(i, j int) bool {
-		return ParseYearToDate(p.Projects[i].Year).After(ParseYearToDate(p.Projects[j].Year))
+		return parseYearToDate(p.Projects[i].Year).After(parseYearToDate(p.Projects[j].Year))
 	})
 
 	return p
@@ -232,14 +232,14 @@ func publications() Publications {
 	}
 
 	sort.Slice(p.Publications, func(i, j int) bool {
-		return ParseYearToDate(p.Publications[i].Year).After(ParseYearToDate(p.Publications[j].Year))
+		return parseYearToDate(p.Publications[i].Year).After(parseYearToDate(p.Publications[j].Year))
 	})
 
 	return p
 }
 
-// ParseMonthYearToDate takes a month year string and converts to time.
-func ParseMonthYearToDate(d string) time.Time {
+// parseMonthYearToDate takes a month year string and converts to time.
+func parseMonthYearToDate(d string) time.Time {
 	t, err := time.Parse("January 2006", d)
 	if err != nil {
 		panic(err)
@@ -248,8 +248,8 @@ func ParseMonthYearToDate(d string) time.Time {
 	return t
 }
 
-// ParseYearToDate takes a year string and converts to time.
-func ParseYearToDate(d string) time.Time {
+// parseYearToDate takes a year string and converts to time.
+func parseYearToDate(d string) time.Time {
 	t, err := time.Parse("2006", d)
 	if err != nil {
 		panic(err)
@@ -258,8 +258,8 @@ func ParseYearToDate(d string) time.Time {
 	return t
 }
 
-// PrettyPrint turns our struct into clean json.
-func PrettyPrint(i interface{}) string {
+// prettyPrint turns our struct into clean json.
+func prettyPrint(i interface{}) string {
 	s, _ := json.MarshalIndent(i, "", "  ")
 	return string(s)
 }
@@ -272,7 +272,7 @@ func commands() {
 			Usage:   "Full Resume",
 			Action: func(c *cli.Context) {
 				r := resume()
-				re := PrettyPrint(r)
+				re := prettyPrint(r)
 				fmt.Println(re)
 			},
 		},
@@ -282,7 +282,7 @@ func commands() {
 			Usage:   "Contact me",
 			Action: func(c *cli.Context) {
 				co := contact()
-				con := PrettyPrint(co)
+				con := prettyPrint(co)
 				fmt.Println(con)
 			},
 		},
@@ -292,7 +292,7 @@ func commands() {
 			Usage:   "About me",
 			Action: func(c *cli.Context) {
 				a := about()
-				ab := PrettyPrint(a)
+				ab := prettyPrint(a)
 				fmt.Println(ab)
 
 			},
@@ -303,7 +303,7 @@ func commands() {
 			Usage:   "View my education",
 			Action: func(c *cli.Context) {
 				e := education()
-				ed := PrettyPrint(e)
+				ed := prettyPrint(e)
 				fmt.Println(ed)
 			},
 		},
@@ -313,7 +313,7 @@ func commands() {
 			Usage:   "View my work experience",
 			Action: func(c *cli.Context) {
 				e := experience()
-				ex := PrettyPrint(e)
+				ex := prettyPrint(e)
 				fmt.Println(ex)
 			},
 		},
@@ -323,7 +323,7 @@ func commands() {
 			Usage:   "View my projects",
 			Action: func(c *cli.Context) {
 				p := projects()
-				pr := PrettyPrint(p)
+				pr := prettyPrint(p)
 				fmt.Println(pr)
 			},
 		},
@@ -333,7 +333,7 @@ func commands() {
 			Usage:   "View my publications",
 			Action: func(c *cli.Context) {
 				p := publications()
-				pu := PrettyPrint(p)
+				pu := prettyPrint(p)
 				fmt.Println(pu)
 			},
 		},
